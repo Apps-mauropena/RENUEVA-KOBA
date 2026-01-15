@@ -1,46 +1,55 @@
 
-export type MaterialType = 'Impermeabilizante' | 'Pintura' | 'Sellador';
+export type MaterialCategory = 'Impermeabilizante' | 'Pintura' | 'Sellador';
 
-export interface MaterialConfig {
-  name: MaterialType;
+export interface Product {
+  id: string;
+  name: string;
+  category: MaterialCategory;
   yield: number; // m2 per bucket
   price: number; // price per bucket
   brand: string; // bucket brand
 }
 
+export interface MaterialConfig {
+  name: string;
+  yield: number; 
+  price: number; 
+  brand: string; 
+}
+
 export interface Worker {
   id: string;
   name: string;
-  dailyRate: number; // cost per 8 hours
+  dailyRate: number;
 }
 
 export interface ProjectConfig {
   m2: number;
-  selectedMaterial: MaterialType;
-  auxMaterialRate: number; // per 100m2
-  profitRate: number; // per 1m2
-  materials: Record<MaterialType, MaterialConfig>;
-  workers: Worker[]; // Individual roster
+  selectedCategory: MaterialCategory;
+  selectedProductId: string;
+  auxMaterialTotal: number; // Cambiado de rate a Total manual
+  profitRate: number;
+  materials: Record<string, MaterialConfig>;
+  workers: Worker[];
   numWorkers: number;
   workerDailyRate: number;
   workDays: number;
-  // Scaffolding rental fields
   scaffoldCount: number;
   scaffoldDailyRate: number;
   scaffoldDays: number;
-  // Masonry repair fields
   masonryRepairEnabled: boolean;
   masonryRepairCost: number;
+  extraBuckets: number; 
+  extraSealerBuckets: number; 
 }
 
-// Interface for AI-driven updates
 export interface AIUpdates {
   m2?: number;
-  selectedMaterial?: string;
+  selectedCategory?: string;
+  selectedProductId?: string;
   yield?: number;
   price?: number;
   brand?: string;
-  auxMaterialRate?: number;
   profitRate?: number;
   numWorkers?: number;
   workerDailyRate?: number;
@@ -50,8 +59,6 @@ export interface AIUpdates {
   scaffoldDays?: number;
   masonryRepairEnabled?: boolean;
   masonryRepairCost?: number;
-  addWorker?: { name: string; dailyRate: number };
-  removeWorker?: string; // id or name
 }
 
 export interface QuoteItem {
@@ -61,13 +68,9 @@ export interface QuoteItem {
   unitPrice: number;
   total: number;
   brand?: string; 
-  yieldDisplay?: string; // Added field for separate column
-  isWarning?: boolean; // Highlight in red
-  laborDetails?: {
-    workers: number;
-    rate: number;
-    days: number;
-  };
+  yieldDisplay?: string;
+  isWarning?: boolean;
+  isAdjustable?: boolean; 
 }
 
 export interface QuoteResult {
